@@ -1,0 +1,16 @@
+export const PRESET_TAGS = [
+  'work',
+  'home',
+  'trek',
+  'formal',
+  'casual',
+  'gym',
+  'beach',
+  'winter',
+  'summer',
+  'hyderabad',
+  'kerala',
+  'travel',
+  'party',
+  'lounge',
+];
