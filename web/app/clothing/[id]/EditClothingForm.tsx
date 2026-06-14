@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { updateClothingAction } from '@/lib/actions';
 import ImageUpload from '@/components/ImageUpload';
 import TagChip from '@/components/TagChip';
@@ -8,6 +9,7 @@ import { PRESET_TAGS } from '@/constants/tags';
 import { type ClothingItem } from '@/types';
 
 export default function EditClothingForm({ item }: { item: ClothingItem }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(item.name);
   const [photos, setPhotos] = useState<string[]>(item.photo_data);
@@ -44,6 +46,8 @@ export default function EditClothingForm({ item }: { item: ClothingItem }) {
         pairs_well_with: pairsWellWith.trim(),
         last_worn_date: lastWorn || null,
       });
+      setOpen(false);
+      router.refresh();
     } catch {
       setSaving(false);
     }

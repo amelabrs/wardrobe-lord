@@ -48,7 +48,6 @@ export async function updateClothingAction(
   revalidatePath('/');
   revalidatePath(`/clothing/${id}`);
   revalidatePath('/search');
-  redirect(`/clothing/${id}`);
 }
 
 export async function markAsWornTodayAction(id: number): Promise<void> {
