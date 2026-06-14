@@ -6,6 +6,7 @@ import { getDb } from '@/lib/db';
 import { getClothingById } from '@/lib/queries';
 import { markAsWornTodayAction, deleteClothingAction } from '@/lib/actions';
 import TagChip from '@/components/TagChip';
+import ImageLightbox from '@/components/ImageLightbox';
 import EditClothingForm from './EditClothingForm';
 import DeleteButton from '@/components/DeleteButton';
 
@@ -38,17 +39,7 @@ export default async function ClothingDetailPage({ params }: { params: Promise<{
 
       {/* Photos */}
       {item.photo_data.length > 0 && (
-        <div className="flex gap-3 overflow-x-auto pb-2 mb-6">
-          {item.photo_data.map((src, i) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={i}
-              src={src}
-              alt={item.name}
-              className="h-56 w-56 object-cover rounded-2xl shrink-0 bg-slate-100"
-            />
-          ))}
-        </div>
+        <ImageLightbox images={item.photo_data} alt={item.name} />
       )}
 
       {/* Details grid */}
