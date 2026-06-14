@@ -3,7 +3,8 @@ import { type ClothingItem, type Location } from '@/types';
 
 const CLOTHING_SELECT = `
   SELECT ci.id, ci.name, ci.photo_data, ci.tags, ci.comments,
-         ci.location_id, ci.last_worn_date::text, ci.created_at::text,
+         ci.location_id, ci.stored_in, ci.pairs_well_with,
+         ci.last_worn_date::text, ci.created_at::text,
          l.name AS location_name
   FROM clothing_items ci
   LEFT JOIN locations l ON ci.location_id = l.id

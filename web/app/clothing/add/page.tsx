@@ -6,8 +6,6 @@ import { addClothingAction } from '@/lib/actions';
 import ImageUpload from '@/components/ImageUpload';
 import TagChip from '@/components/TagChip';
 import { PRESET_TAGS } from '@/constants/tags';
-import { type Location } from '@/types';
-import { useEffect } from 'react';
 
 export default function AddClothingPage() {
   const router = useRouter();
@@ -16,15 +14,11 @@ export default function AddClothingPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [customTag, setCustomTag] = useState('');
   const [comments, setComments] = useState('');
-  const [locationId, setLocationId] = useState<number | null>(null);
+  const [storedIn, setStoredIn] = useState('');
+  const [pairsWellWith, setPairsWellWith] = useState('');
   const [lastWorn, setLastWorn] = useState('');
-  const [locations, setLocations] = useState<Location[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    fetch('/api/locations').then((r) => r.json()).then(setLocations).catch(() => {});
-  }, []);
 
   function toggleTag(tag: string) {
     setTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
@@ -47,7 +41,9 @@ export default function AddClothingPage() {
         photo_data: photos,
         tags,
         comments: comments.trim(),
-        location_id: locationId,
+        location_id: null,
+        stored_in: storedIn.trim(),
+        pairs_well_with: pairsWellWith.trim(),
         last_worn_date: lastWorn || null,
       });
     } catch {
@@ -112,26 +108,22 @@ export default function AddClothingPage() {
           />
         </Section>
 
-        <Section label="Store In">
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setLocationId(null)}
-              className={`px-4 py-2 rounded-xl border text-sm font-medium transition-colors ${locationId === null ? 'bg-indigo-500 text-white border-indigo-500' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}
-            >
-              None
-            </button>
-            {locations.map((loc) => (
-              <button
-                key={loc.id}
-                type="button"
-                onClick={() => setLocationId(loc.id)}
-                className={`px-4 py-2 rounded-xl border text-sm font-medium transition-colors ${locationId === loc.id ? 'bg-indigo-500 text-white border-indigo-500' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}
-              >
-                {loc.name}
-              </button>
-            ))}
-          </div>
+        <Section label="Stored In">
+          <input
+            className="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-indigo-400"
+            placeholder="e.g. Left shelf, Top drawer…"
+            value={storedIn}
+            onChange={(e) => setStoredIn(e.target.value)}
+          />
+        </Section>
+
+        <Section label="Pairs Well With">
+          <input
+            className="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-indigo-400"
+            placeholder="e.g. Black chinos, White sneakers…"
+            value={pairsWellWith}
+            onChange={(e) => setPairsWellWith(e.target.value)}
+          />
         </Section>
 
         <Section label="Last Worn">

@@ -7,6 +7,7 @@ import { getLocationById, getClothingByLocation } from '@/lib/queries';
 import { deleteLocationAction } from '@/lib/actions';
 import ClothingCard from '@/components/ClothingCard';
 import EditLocationForm from './EditLocationForm';
+import DeleteButton from '@/components/DeleteButton';
 
 export default async function LocationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -54,14 +55,7 @@ export default async function LocationDetailPage({ params }: { params: Promise<{
         </div>
       )}
 
-      <form action={deleteLocation}>
-        <button
-          className="w-full border border-red-200 text-red-500 py-3 rounded-2xl font-semibold hover:bg-red-50 transition-colors"
-          onClick={(e) => { if (!confirm(`Delete "${location.name}"? Items stored here will be unassigned.`)) e.preventDefault(); }}
-        >
-          Delete Location
-        </button>
-      </form>
+      <DeleteButton action={deleteLocation} message={`Delete "${location.name}"? Items stored here will be unassigned.`} label="Delete Location" />
     </div>
   );
 }

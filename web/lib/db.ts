@@ -38,6 +38,9 @@ async function initDb(db: Pool): Promise<void> {
       last_worn_date DATE,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
+
+    ALTER TABLE clothing_items ADD COLUMN IF NOT EXISTS stored_in TEXT NOT NULL DEFAULT '';
+    ALTER TABLE clothing_items ADD COLUMN IF NOT EXISTS pairs_well_with TEXT NOT NULL DEFAULT '';
   `);
 }
 

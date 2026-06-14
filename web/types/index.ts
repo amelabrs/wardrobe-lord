@@ -14,6 +14,8 @@ export type ClothingItem = {
   comments: string;
   location_id: number | null;
   location_name: string | null;
+  stored_in: string;
+  pairs_well_with: string;
   last_worn_date: string | null;
   created_at: string;
 };

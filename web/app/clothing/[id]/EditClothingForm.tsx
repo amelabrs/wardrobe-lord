@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { updateClothingAction } from '@/lib/actions';
 import ImageUpload from '@/components/ImageUpload';
 import TagChip from '@/components/TagChip';
 import { PRESET_TAGS } from '@/constants/tags';
-import { type ClothingItem, type Location } from '@/types';
+import { type ClothingItem } from '@/types';
 
 export default function EditClothingForm({ item }: { item: ClothingItem }) {
   const [open, setOpen] = useState(false);
@@ -14,14 +14,10 @@ export default function EditClothingForm({ item }: { item: ClothingItem }) {
   const [tags, setTags] = useState<string[]>(item.tags);
   const [customTag, setCustomTag] = useState('');
   const [comments, setComments] = useState(item.comments);
-  const [locationId, setLocationId] = useState<number | null>(item.location_id);
+  const [storedIn, setStoredIn] = useState(item.stored_in);
+  const [pairsWellWith, setPairsWellWith] = useState(item.pairs_well_with);
   const [lastWorn, setLastWorn] = useState(item.last_worn_date ?? '');
-  const [locations, setLocations] = useState<Location[]>([]);
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    if (open) fetch('/api/locations').then((r) => r.json()).then(setLocations).catch(() => {});
-  }, [open]);
 
   function toggleTag(tag: string) {
     setTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
@@ -43,7 +39,9 @@ export default function EditClothingForm({ item }: { item: ClothingItem }) {
         photo_data: photos,
         tags,
         comments: comments.trim(),
-        location_id: locationId,
+        location_id: null,
+        stored_in: storedIn.trim(),
+        pairs_well_with: pairsWellWith.trim(),
         last_worn_date: lastWorn || null,
       });
     } catch {
@@ -116,13 +114,23 @@ export default function EditClothingForm({ item }: { item: ClothingItem }) {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">Store In</label>
-                <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={() => setLocationId(null)} className={`px-4 py-2 rounded-xl border text-sm font-medium ${locationId === null ? 'bg-indigo-500 text-white border-indigo-500' : 'bg-white text-slate-600 border-slate-200'}`}>None</button>
-                  {locations.map((loc) => (
-                    <button key={loc.id} type="button" onClick={() => setLocationId(loc.id)} className={`px-4 py-2 rounded-xl border text-sm font-medium ${locationId === loc.id ? 'bg-indigo-500 text-white border-indigo-500' : 'bg-white text-slate-600 border-slate-200'}`}>{loc.name}</button>
-                  ))}
-                </div>
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">Stored In</label>
+                <input
+                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-indigo-400"
+                  placeholder="e.g. Left shelf, Top drawer…"
+                  value={storedIn}
+                  onChange={(e) => setStoredIn(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">Pairs Well With</label>
+                <input
+                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-indigo-400"
+                  placeholder="e.g. Black chinos, White sneakers…"
+                  value={pairsWellWith}
+                  onChange={(e) => setPairsWellWith(e.target.value)}
+                />
               </div>
 
               <div>

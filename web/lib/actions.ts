@@ -10,13 +10,15 @@ export async function addClothingAction(data: {
   tags: string[];
   comments: string;
   location_id: number | null;
+  stored_in: string;
+  pairs_well_with: string;
   last_worn_date: string | null;
 }): Promise<void> {
   const db = await getDb();
   await db.query(
-    `INSERT INTO clothing_items (name, photo_data, tags, comments, location_id, last_worn_date)
-     VALUES ($1, $2, $3, $4, $5, $6)`,
-    [data.name, JSON.stringify(data.photo_data), data.tags, data.comments, data.location_id, data.last_worn_date || null]
+    `INSERT INTO clothing_items (name, photo_data, tags, comments, location_id, stored_in, pairs_well_with, last_worn_date)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [data.name, JSON.stringify(data.photo_data), data.tags, data.comments, data.location_id, data.stored_in, data.pairs_well_with, data.last_worn_date || null]
   );
   revalidatePath('/');
   revalidatePath('/search');
@@ -31,15 +33,17 @@ export async function updateClothingAction(
     tags: string[];
     comments: string;
     location_id: number | null;
+    stored_in: string;
+    pairs_well_with: string;
     last_worn_date: string | null;
   }
 ): Promise<void> {
   const db = await getDb();
   await db.query(
     `UPDATE clothing_items
-     SET name=$1, photo_data=$2, tags=$3, comments=$4, location_id=$5, last_worn_date=$6
-     WHERE id=$7`,
-    [data.name, JSON.stringify(data.photo_data), data.tags, data.comments, data.location_id, data.last_worn_date || null, id]
+     SET name=$1, photo_data=$2, tags=$3, comments=$4, location_id=$5, stored_in=$6, pairs_well_with=$7, last_worn_date=$8
+     WHERE id=$9`,
+    [data.name, JSON.stringify(data.photo_data), data.tags, data.comments, data.location_id, data.stored_in, data.pairs_well_with, data.last_worn_date || null, id]
   );
   revalidatePath('/');
   revalidatePath(`/clothing/${id}`);

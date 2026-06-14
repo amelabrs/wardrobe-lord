@@ -7,6 +7,7 @@ import { getClothingById } from '@/lib/queries';
 import { markAsWornTodayAction, deleteClothingAction } from '@/lib/actions';
 import TagChip from '@/components/TagChip';
 import EditClothingForm from './EditClothingForm';
+import DeleteButton from '@/components/DeleteButton';
 
 function formatLastWorn(date: string | null): string {
   if (!date) return 'Never worn';
@@ -63,9 +64,15 @@ export default async function ClothingDetailPage({ params }: { params: Promise<{
           </div>
         </DetailRow>
 
-        <DetailRow label="Location">
-          <span className="text-slate-700">{item.location_name || 'Not assigned'}</span>
+        <DetailRow label="Stored In">
+          <span className="text-slate-700">{item.stored_in || '—'}</span>
         </DetailRow>
+
+        {item.pairs_well_with && (
+          <DetailRow label="Pairs Well With">
+            <p className="text-slate-700">{item.pairs_well_with}</p>
+          </DetailRow>
+        )}
 
         <DetailRow label="Tags">
           {item.tags.length > 0 ? (
@@ -86,15 +93,7 @@ export default async function ClothingDetailPage({ params }: { params: Promise<{
         )}
       </div>
 
-      {/* Delete */}
-      <form action={deleteItem}>
-        <button
-          className="w-full border border-red-200 text-red-500 py-3 rounded-2xl font-semibold hover:bg-red-50 transition-colors"
-          onClick={(e) => { if (!confirm(`Delete "${item.name}"?`)) e.preventDefault(); }}
-        >
-          Delete Item
-        </button>
-      </form>
+      <DeleteButton action={deleteItem} message={`Delete "${item.name}"?`} label="Delete Item" />
     </div>
   );
 }
